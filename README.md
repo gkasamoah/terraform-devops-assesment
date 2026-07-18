@@ -28,7 +28,7 @@ flowchart LR
     end
 ```
 
-## AWS design mapping (design-only)
+
 ## AWS architecture (design-only)
 
 As required for **Path A**, this repository includes a design-only AWS architecture showing how the local Docker implementation maps to AWS services. No AWS resources are deployed as part of this project.
@@ -84,7 +84,7 @@ No AWS deployment is performed here; this is a design-only mapping for the Path 
 
 ```bash
 docker compose up  
-### from the root directory containing the compose file 
+From the root directory containing the compose file 
 ```
 
 ### 2. Initialize Terraform
@@ -98,7 +98,7 @@ terraform init -reconfigure
 The repository does not store the database password in plaintext. Supply it through an environment variable before running Terraform:
 
 ```bash
-export TF_VAR_db_password="your-secret"
+export TF_VAR_db_password="your secret"
 ```
 
 ### 4. Run the environment
