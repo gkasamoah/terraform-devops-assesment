@@ -1,0 +1,40 @@
+name: Terraform Apply on Merge
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    environment:
+      name: production
+      url: https://example.invalid
+    env:
+      TF_IN_AUTOMATION: "true"
+      TF_VAR_db_password: ${{ secrets.TF_VAR_DB_PASSWORD }}
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d8e7afde0c5a0f8b
+
+      - name: Start MinIO backend
+        run: docker compose up -d
+
+      - name: Wait for MinIO to become ready
+        run: bash ./bootstrap/wait-for-minic.sh
+
+      - name: Create Terraform remote state bucket
+        run: bash ./bootstrap/create-bucket.sh
+
+      - name: Terraform init
+        working-directory: environments/production
+        run: docker run --rm -v "$PWD/../..:/work" -w /work/environments/production hashicorp/terraform:1.11.4 init -reconfigure
+
+      - name: Terraform apply
+        working-directory: environments/production
+        run: docker run --rm -v "$PWD/../..:/work" -w /work/environments/production hashicorp/terraform:1.11.4 apply -auto-approve
