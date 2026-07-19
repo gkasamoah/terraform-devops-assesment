@@ -48,13 +48,22 @@ resource "docker_container" "postgres" {
 
   networks_advanced {
     name = docker_network.database.name
+      aliases = [
+      "postgres"
+    ]
   }
 
   restart = "unless-stopped"
 }
 
 resource "docker_image" "api" {
+
   name = var.api_image
+
+  build {
+    context = var.api_build_context
+  }
+
 }
 
 resource "docker_container" "api" {
@@ -63,20 +72,30 @@ resource "docker_container" "api" {
 
   image = docker_image.api.image_id
 
-  command = [
-    "-text=Hello from ${var.environment}"
+
+  env = [
+    "NODE_ENV=${var.node-environment}",
+    "DATABASE_HOST=${var.environment}-postgres",
+    "DATABASE_PORT=5432",
+    "DATABASE_USER=appuser",
+    "DATABASE_PASSWORD=${var.db_password}",
+    "DATABASE_NAME=appdb"
   ]
+
 
   networks_advanced {
     name = docker_network.internal.name
   }
 
+
   networks_advanced {
     name = docker_network.database.name
   }
 
+
   restart = "unless-stopped"
 }
+
 resource "local_file" "nginx_config" {
 
   filename = "${path.module}/generated-${var.environment}.conf"
@@ -120,6 +139,11 @@ resource "docker_container" "nginx" {
     docker_container.api
   ]
 }
+
 resource "docker_image" "nginx" {
   name = var.nginx_image
+
+  build {
+    context = "../../nginx"
+  }
 }

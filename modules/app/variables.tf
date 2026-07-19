@@ -12,7 +12,7 @@ variable "db_password" {
 variable "api_image" {
   description = "API image"
   type        = string
-  default     = "hashicorp/http-echo:1.0"
+  default     = "staging-api:latest"
 }
 
 variable "nginx_image" {
@@ -29,4 +29,15 @@ variable "nginx_external_port" {
   description = "Host port for the nginx container"
   type        = number
   default     = 8080
+}
+variable "api_build_context" {
+  description = "Path to Express backend"
+  type        = string
+  default     = "../../expressbackend"
+}
+
+variable "node-environment"{
+  description ="node environment"
+  type = string
+  default = "staging"
 }

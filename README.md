@@ -115,7 +115,7 @@ For production, use the production environment directory and a separate secret v
 
 To activate the CI pipeline in GitHub:
 
-1. Add a environment secret named `TF_VAR_DB_PASSWORD`.
+1. Add  environment secret named `TF_VAR_DB_PASSWORD`.
 2. Ensure the workflow has access to that secret through the GitHub Environment or repository settings.
 3. Keep the workflow permissions minimal:
    - `contents: read`
