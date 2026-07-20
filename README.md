@@ -100,7 +100,9 @@ The repository does not store the database password in plaintext. Supply it thro
 ```bash
 export TF_VAR_db_password="your secret"
 ```
-
+```
+there is default one for the staging environment supplied through the **terraform.tfvars** in the environments/staging directory
+```
 ### 4. Run the environment
 
 ```bash
@@ -170,6 +172,10 @@ That gives a concrete proof of isolation without exposing PostgreSQL to the publ
 - [.github/workflows/terraform-pr.yml](.github/workflows/terraform-pr.yml) — PR validation workflow
 - [.github/workflows/terraform-merge.yml](.github/workflows/terraform-merge.yml) — merge-to-main apply workflow
 - [scripts](scripts) - contains shell to verify isolations
+- [expressbackend](expressbackend) - contains express api code
+- [nginx](nginx) - contains a small Dockerfile to serve nginx
+
+
 
 # Submission
 
@@ -209,5 +215,6 @@ If additional time were available, the next improvements would be:
 * Add automated integration tests that verify network isolation after deployment.
 * Expand the verification scripts to include additional health and connectivity checks.
 * Add scheduled drift detection using `terraform plan`.
-* Strengthen the CI/CD pipeline with provider caching, concurrency controls, and additional security scanning.
+* Strengthen the CI/CD pipeline with provider caching, and additional security scanning.
 * Extend the Terraform modules to support both Docker and AWS providers through a common module interface.
+
